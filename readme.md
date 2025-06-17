@@ -4,6 +4,9 @@ this library is based on @lit-labs/ssr@3.3.1
 we changed Iterable to AsyncIterable to run async promise when component is created before rendered.
 
 
+## Installation
+
+run `npm i lit-ssr-async`
 
 ## HOW TO USE IT:
 
