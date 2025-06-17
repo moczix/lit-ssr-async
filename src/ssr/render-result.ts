@@ -17,36 +17,16 @@
  * The utility functions {@link collectRenderResult} and
  * {@link collectRenderResultSync} do this for you.
  */
-export type RenderResult = Iterable<string | Promise<RenderResult>>;
+export type RenderResult = AsyncIterable<string | RenderResult | Promise<RenderResult>>;
 
 /**
  * Joins a RenderResult into a string
  */
-export const collectResult = async (result: RenderResult): Promise<string> => {
+export const collectResultAsync = async (result: RenderResult): Promise<string> => {
   let value = '';
-  for (const chunk of result) {
+  for await (const chunk of result) {
     value +=
-      typeof chunk === 'string' ? chunk : await collectResult(await chunk);
-  }
-  return value;
-};
-
-/**
- * Joins a RenderResult into a string synchronously.
- *
- * This function throws if a RenderResult contains a Promise.
- */
-export const collectResultSync = (result: RenderResult): string => {
-  let value = '';
-  for (const chunk of result) {
-    if (typeof chunk === 'string') {
-      value += chunk;
-    } else {
-      throw new Error(
-        'Promises not supported in collectResultSync. ' +
-          'Please use collectResult.'
-      );
-    }
+      typeof chunk === 'string' ? chunk : await collectResultAsync(await chunk);
   }
   return value;
 };

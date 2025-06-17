@@ -11,9 +11,10 @@ import {
   ariaMixinAttributes,
   HYDRATE_INTERNALS_ATTR_PREFIX,
 } from '@lit-labs/ssr-dom-shim';
-import {renderValue} from './render-value-async.js';
+import {renderValueAsync} from './render-value-async.js';
 import type {RenderInfo} from './render-value-async.js';
 import type {RenderResult} from './render-result.js';
+import { isLitWithSSR } from './lit-with-ssr.js';
 
 export type Constructor<T> = {new (): T};
 
@@ -121,7 +122,10 @@ export class LitElementRenderer extends ElementRenderer {
     attributeToProperty(this.element as LitElement, name, value);
   }
 
-  override *renderShadow(renderInfo: RenderInfo): RenderResult {
+  override async *renderShadow(renderInfo: RenderInfo): RenderResult {
+    if (isLitWithSSR(this.element)){
+      await this.element.ssrConnected();
+    }
     // Render styles.
     const styles = (this.element.constructor as typeof LitElement)
       .elementStyles;
@@ -134,14 +138,17 @@ export class LitElementRenderer extends ElementRenderer {
     }
     // Render template
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    yield* renderValue((this.element as any).render(), renderInfo);
+    yield* renderValueAsync((this.element as any).render(), renderInfo);
   }
 
-  override *renderLight(renderInfo: RenderInfo): RenderResult {
+  override async *renderLight(renderInfo: RenderInfo): RenderResult {
+    if (isLitWithSSR(this.element)){
+      await this.element.ssrConnected();
+    }
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const value = (this.element as any)?.renderLight();
     if (value) {
-      yield* renderValue(value, renderInfo);
+      yield* renderValueAsync(value, renderInfo);
     } else {
       yield '';
     }

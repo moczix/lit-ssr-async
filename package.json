@@ -1,13 +1,14 @@
 {
   "name": "lit-ssr-async",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "main": "index.js",
+  "type": "module",
   "scripts": {
     "build": "tsc"
   },
-  "author": "",
+  "author": "czornypan@gmail.com",
   "license": "ISC",
-  "description": "",
+  "description": "this library is based on @lit-labs/ssr@3.3.1 to support Async work",
   "dependencies": {
     "@lit-labs/ssr": "^3.3.1",
     "lit": "^3.3.0"

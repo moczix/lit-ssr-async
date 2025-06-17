@@ -185,7 +185,7 @@ export abstract class ElementRenderer {
    * The default implementation serializes all attributes on the element
    * instance.
    */
-  *renderAttributes(): RenderResult {
+  async *renderAttributes(): RenderResult {
     if (this.element !== undefined) {
       const {attributes} = this.element;
       for (
@@ -215,7 +215,7 @@ export class FallbackRenderer extends ElementRenderer {
     this._attributes[name.toLowerCase()] = value;
   }
 
-  override *renderAttributes(): RenderResult {
+  override async *renderAttributes(): RenderResult {
     for (const [name, value] of Object.entries(this._attributes)) {
       if (value === '' || value === undefined || value === null) {
         yield ` ${name}`;

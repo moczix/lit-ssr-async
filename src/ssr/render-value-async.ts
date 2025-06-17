@@ -721,7 +721,7 @@ declare global {
   }
 }
 
-export function* renderValue(
+export async function* renderValueAsync(
   value: unknown,
   renderInfo: RenderInfo,
   hydratable = true
@@ -786,7 +786,7 @@ export function* renderValue(
     } else if (!isPrimitive(value) && isIterable(value)) {
       // Check that value is not a primitive, since strings are iterable
       for (const item of value) {
-        yield* renderValue(item, renderInfo, hydratable);
+        yield* renderValueAsync(item, renderInfo, hydratable);
       }
     } else {
       yield escapeHtml(String(value));
@@ -797,7 +797,7 @@ export function* renderValue(
   }
 }
 
-function* renderTemplateResult(
+async function* renderTemplateResult(
   result: TemplateResult,
   renderInfo: RenderInfo
 ): RenderResult {
@@ -843,7 +843,7 @@ And the inner template was:
             );
           }
         }
-        yield* renderValue(value, renderInfo, isValueHydratable);
+        yield* renderValueAsync(value, renderInfo, isValueHydratable);
         break;
       }
       case 'attribute-part': {

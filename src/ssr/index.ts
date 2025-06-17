@@ -1,2 +1,3 @@
-export { render } from './render-async.js';
-export { collectResult } from './render-result.js';
+export { renderAsync } from './render-async.js';
+export { collectResultAsync } from './render-result.js';
+export { LitWithSSR } from './lit-with-ssr.js';

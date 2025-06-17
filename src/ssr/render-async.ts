@@ -5,7 +5,7 @@
  */
 
 import {LitElementRenderer} from './lit-element-renderer.js';
-import {renderValue} from './render-value-async.js';
+import {renderValueAsync} from './render-value-async.js';
 
 import type {RenderInfo} from './render-value-async.js';
 export type {RenderInfo} from './render-value-async.js';
@@ -26,7 +26,7 @@ export type {RenderResult} from './render-result.js';
  *   to any reentrant calls to `render`, e.g. from a `renderShadow` callback
  *   on an ElementRenderer.
  */
-export function* render(
+export async function* renderAsync(
   value: unknown,
   renderInfo?: Partial<RenderInfo>
 ): RenderResult {
@@ -43,5 +43,5 @@ export function* render(
   if (isTemplateResult(value)) {
     hydratable = isHydratable(value);
   }
-  yield* renderValue(value, renderInfo as RenderInfo, hydratable);
+  yield* renderValueAsync(value, renderInfo as RenderInfo, hydratable);
 }
